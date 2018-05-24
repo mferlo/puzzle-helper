@@ -1,30 +1,31 @@
 const Word = require('./word.js');
 const Lexicon = require('./lexicon.js');
 
-const word = Word.makeWord(3, "uct", 3, 1);
-if (word.toString() !== "***uct****") {
-  throw "word tostring failed";
-}
+const d1 = [ , "tsetsefly", "how", "who", "ooo" ];
 
-const trigramParts = [ "anc", "rel", "str", "ure", "e", "s" ];
-const trigramAnswers = Lexicon.validWords(word, trigramParts);
-if (trigramAnswers.length !== 2 ||
-    trigramAnswers[0] !== 'reluctance' ||
-    trigramAnswers[1] !== 'structures') {
+const a1 = Lexicon.validWords(
+  Word.makeWord(3, "uct", 3, 1),
+  [ "anc", "rel", "str", "ure", "e", "s" ],
+  ["deductible", "reluctance", "structures", "short", "veryMuchTooLong"]);
+if (a1.length !== 2 || a1[0] !== 'reluctance' || a1[1] !== 'structures') {
   throw "something broke";
 }
 
-const dupWord = Word.makeWord(3, 3, 3);
-const dupParts = [ "fly", "tse", "tse" ];
-const dupAnswers = Lexicon.validWords(dupWord, dupParts);
-if (dupAnswers.length !== 1 || dupAnswers[0] !== "tsetsefly") {
+const a2 = Lexicon.validWords(
+  Word.makeWord(3, 3, 3),
+  [ "fly", "tse", "tse" ],
+  ["tsetsefly"]);
+
+if (a2.length !== 1 || a2[0] !== "tsetsefly") {
   throw "something broke with the anti-dup logic";
 }
 
-const singleWord = Word.makeWord(1, 1, 1);
-const singleParts = "ohw".split('');
-const singleAnswers = Lexicon.validWords(singleWord, singleParts);
-if (singleAnswers.length !== 2 || singleAnswers[0] !== 'how' || singleAnswers[1] !== 'who') {
+const a3 = Lexicon.validWords(
+  Word.makeWord(1, 1, 1),
+  [ "o", "h", "w" ],
+  [ "how", "who", "ooo" ]);
+
+if (a3.length !== 2 || a3[0] !== 'how' || a3[1] !== 'who') {
   throw "something else broke";
 }
 

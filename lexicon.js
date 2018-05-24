@@ -10,8 +10,6 @@ const removeFirst = (arr, e) => {
    anyValidFor(word) // (implies a trie?)
 */
 
-const globalLexicon = [ "deductible", "reluctance", "structures", "short", "a very long word indeed", "tsetsefly", "how", "who", "ooo" ];
-
 const validWordsImpl = (word, lexicon, parts, results) => {
   if (word.completed()) {
     const w = word.toString();
@@ -34,11 +32,11 @@ const validWordsImpl = (word, lexicon, parts, results) => {
   }
 }
 
-const validWords = (word, parts) => {
+const validWords = (word, parts, lexicon) => {
   const len = word.count();
-  const lexicon = globalLexicon.filter(l => l.length === len);
+  const filteredLexicon = lexicon.filter(l => l.length === len);
   const results = new Set();
-  validWordsImpl(word, lexicon, parts, results);
+  validWordsImpl(word, filteredLexicon, parts, results);
   return Array.from(results).sort();
 }
 
