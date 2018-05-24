@@ -1,6 +1,3 @@
-// FIXME: Sometimes "part" is a Part, and sometimes it is a string.
-//        In this file, change "part" to something better.
-
 const removeFirst = (arr, e) => {
   const i = arr.findIndex(a => a === e);
   const result = [...arr];
