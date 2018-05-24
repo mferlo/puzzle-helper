@@ -1,8 +1,6 @@
 const removeFirst = (arr, e) => {
   const i = arr.findIndex(a => a === e);
-  const result = [...arr];
-  result.splice(i, 1);
-  return result;
+  return [...arr.slice(0, i), ...arr.slice(i+1)];
 }
 
 /* FIXME lexicon class (immutable):
@@ -26,7 +24,7 @@ const validWordsImpl = (word, lexicon, parts, results) => {
   // FIXME: if we can't possibly make a word with what we've got so far,
   // return early (even if we can fill in blanks)
 
-  const { i, len } = word.getFirstBlank();  // parts.findIndex(part => part.type === blank);
+  const { i, len } = word.getFirstBlank();
   for (const part of parts.filter(p => p.length === len)) {
 	validWordsImpl(
 	  word.withNewWordPart(i, part),
