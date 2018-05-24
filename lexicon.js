@@ -1,59 +1,7 @@
-"use strict";
+// FIXME: Sometimes "part" is a Part, and sometimes it is a string.
+//        In this file, change "part" to something better.
 
-const letters = 'letters';
-const blank = 'blank';
-const unknownCharacter = '*';
-
-class Part {
-  constructor(value) {
-	this.str = value;
-	this.len = value.length;
-  }
-  
-  toString() {
-	return this.str;
-  }
-}
-
-class WordPart extends Part {
-  constructor(value) {
-	super(value);
-	this.type = letters;
-  }
-}
-
-class BlankPart extends Part {
-  constructor(length) {
-	super(unknownCharacter.repeat(length));
-	this.type = blank;
-  }
-}
-
-const makePart = v => Number.isInteger(v) ? new BlankPart(v) : new WordPart(v);
-
-class Word {
-  constructor(...parts) {
-	this.parts = parts.every(p => p instanceof Part) ? parts : parts.map(makePart);
-  }
-
-  toString() {
-	return this.parts.join('');
-  }
-
-  count() {
-	return this.parts.reduce((total, curPart) => total + curPart.len, 0);
-  }
-
-  completed() {
-	return this.parts.every(part => part.type === letters);
-  }
-
-  withNewPart(i, part) {
-	const clone = new Word(...this.parts);
-	clone.parts[i] = part;
-	return clone;
-  }
-}
+const Word = require('./word.js');
 
 const removeFirst = (arr, e) => {
   const i = arr.findIndex(a => a === e);
@@ -83,10 +31,10 @@ const validWordsImpl = (word, lexicon, parts, results) => {
   // FIXME: if we can't possibly make a word with what we've got so far,
   // return early (even if we can fill in blanks)
 
-  const i = word.parts.findIndex(part => part.type === blank);
-  for (const part of parts.filter(p => p.length === word.parts[i].len)) {
+  const { i, len } = word.getFirstBlank();  // parts.findIndex(part => part.type === blank);
+  for (const part of parts.filter(p => p.length === len)) {
 	validWordsImpl(
-	  word.withNewPart(i, new WordPart(part)),
+	  word.withNewWordPart(i, part),
 	  lexicon,
 	  removeFirst(parts, part),
 	  results);
@@ -101,15 +49,15 @@ const validWords = (word, parts) => {
   return Array.from(results).sort();
 }
 
-const word = new Word(3, "uct", 3, 1);
+const word = Word.makeWord(3, "uct", 3, 1);
 const trigramParts = [ "anc", "rel", "str", "ure", "e", "s" ];
 console.log(word.toString());
 console.log(validWords(word, trigramParts));
 
-const duplicateWord = new Word(3, 3, 3);
+const duplicateWord = Word.makeWord(3, 3, 3);
 const dupParts = [ "fly", "tse", "tse" ];
 console.log(validWords(duplicateWord, dupParts));
 
-const singleWord = new Word(1, 1, 1);
+const singleWord = Word.makeWord(1, 1, 1);
 const singleParts = "ohw".split('');
 console.log(validWords(singleWord, singleParts));
