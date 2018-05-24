@@ -18,12 +18,21 @@ class WordPart extends Part {
     super(value);
     this.type = letters;
   }
+
+  asRegex() {
+    return this.str;
+  }
 }
 
 class BlankPart extends Part {
   constructor(length) {
     super(unknownCharacter.repeat(length));
     this.type = blank;
+    this.re = ".".repeat(length);
+  }
+
+  asRegex() {
+    return this.re;
   }
 }
 
@@ -53,6 +62,11 @@ class Word {
 
   withNewWordPart(i, s) {
     return new Word(...this.parts.slice(0, i), new WordPart(s), ...this.parts.slice(i+1));
+  }
+
+  asRegex() {
+    const re = this.parts.map(p => p.asRegex()).join('');
+    return new RegExp('^' + re + '$');
   }
 }
 

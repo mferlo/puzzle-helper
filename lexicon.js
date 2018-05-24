@@ -1,8 +1,3 @@
-/* FIXME lexicon class (immutable):
-   validWordsFor(word, parts)
-   anyValidFor(word) // (implies a trie?)
-*/
-
 class Lexicon {
   constructor(wordList) {
     this.words = wordList;
@@ -14,6 +9,11 @@ class Lexicon {
 
   ofLength(n) {
     return new Lexicon(this.words.filter(w => w.length === n));
+  }
+
+  anyCanMatch(word) {
+    const re = word.asRegex();
+    return this.words.some(w => re.test(w));
   }
 }
 
@@ -33,8 +33,9 @@ const validWordsImpl = (word, lexicon, parts, recordValidWord) => {
     return;
   }
 
-  // FIXME: if we can't possibly make a word with what we've got so far,
-  // return early (even if we can fill in blanks)
+  if (!lexicon.anyCanMatch(word)) {
+    return;
+  }
 
   const { i, len } = word.getFirstBlank();
   for (const part of parts.filter(p => p.length === len)) {
