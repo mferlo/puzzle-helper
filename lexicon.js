@@ -1,8 +1,6 @@
 // FIXME: Sometimes "part" is a Part, and sometimes it is a string.
 //        In this file, change "part" to something better.
 
-const Word = require('./word.js');
-
 const removeFirst = (arr, e) => {
   const i = arr.findIndex(a => a === e);
   const result = [...arr];
@@ -49,15 +47,4 @@ const validWords = (word, parts) => {
   return Array.from(results).sort();
 }
 
-const word = Word.makeWord(3, "uct", 3, 1);
-const trigramParts = [ "anc", "rel", "str", "ure", "e", "s" ];
-console.log(word.toString());
-console.log(validWords(word, trigramParts));
-
-const duplicateWord = Word.makeWord(3, 3, 3);
-const dupParts = [ "fly", "tse", "tse" ];
-console.log(validWords(duplicateWord, dupParts));
-
-const singleWord = Word.makeWord(1, 1, 1);
-const singleParts = "ohw".split('');
-console.log(validWords(singleWord, singleParts));
+module.exports.validWords = validWords;
