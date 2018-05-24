@@ -14,11 +14,11 @@ const globalLexicon = [ "deductible", "reluctance", "structures", "short", "a ve
 
 const validWordsImpl = (word, lexicon, parts, results) => {
   if (word.completed()) {
-	const w = word.toString();
-	if (lexicon.includes(w)) {
-	  results.add(w);
-	}
-	return;
+    const w = word.toString();
+    if (lexicon.includes(w)) {
+      results.add(w);
+    }
+    return;
   }
 
   // FIXME: if we can't possibly make a word with what we've got so far,
@@ -26,11 +26,11 @@ const validWordsImpl = (word, lexicon, parts, results) => {
 
   const { i, len } = word.getFirstBlank();
   for (const part of parts.filter(p => p.length === len)) {
-	validWordsImpl(
-	  word.withNewWordPart(i, part),
-	  lexicon,
-	  removeFirst(parts, part),
-	  results);
+    validWordsImpl(
+      word.withNewWordPart(i, part),
+      lexicon,
+      removeFirst(parts, part),
+      results);
   }
 }
 
