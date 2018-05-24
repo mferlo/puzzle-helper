@@ -1,12 +1,11 @@
 const Word = require('./word.js');
 const Lexicon = require('./lexicon.js');
 
-const d1 = [ , "tsetsefly", "how", "who", "ooo" ];
-
 const a1 = Lexicon.validWords(
   Word.makeWord(3, "uct", 3, 1),
   [ "anc", "rel", "str", "ure", "e", "s" ],
   ["deductible", "reluctance", "structures", "short", "veryMuchTooLong"]);
+
 if (a1.length !== 2 || a1[0] !== 'reluctance' || a1[1] !== 'structures') {
   throw "something broke";
 }
