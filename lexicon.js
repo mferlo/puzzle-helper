@@ -1,20 +1,34 @@
+/* FIXME lexicon class (immutable):
+   validWordsFor(word, parts)
+   anyValidFor(word) // (implies a trie?)
+*/
+
+class Lexicon {
+  constructor(wordList) {
+    this.words = wordList;
+  }
+
+  isValid(word) {
+    return this.words.includes(word);
+  }
+
+  ofLength(n) {
+    return new Lexicon(this.words.filter(w => w.length === n));
+  }
+}
+
+
 const removeFirst = (arr, e) => {
   const i = arr.findIndex(a => a === e);
   return [...arr.slice(0, i), ...arr.slice(i+1)];
 }
 
-/* FIXME lexicon class (immutable):
-   fromWords()
-   ofLength()
-   validWordsFor(word, parts)
-   anyValidFor(word) // (implies a trie?)
-*/
 
-const validWordsImpl = (word, lexicon, parts, results) => {
+const validWordsImpl = (word, lexicon, parts, recordValidWord) => {
   if (word.completed()) {
     const w = word.toString();
-    if (lexicon.includes(w)) {
-      results.add(w);
+    if (lexicon.isValid(w)) {
+      recordValidWord(w);
     }
     return;
   }
@@ -28,16 +42,17 @@ const validWordsImpl = (word, lexicon, parts, results) => {
       word.withNewWordPart(i, part),
       lexicon,
       removeFirst(parts, part),
-      results);
+      recordValidWord);
   }
 }
 
-const validWords = (word, parts, lexicon) => {
-  const len = word.count();
-  const filteredLexicon = lexicon.filter(l => l.length === len);
+const validWords = (word, parts, wordList) => {
+  const lexicon = new Lexicon(wordList);
+  const filteredLexicon = lexicon.ofLength(word.count());
   const results = new Set();
-  validWordsImpl(word, filteredLexicon, parts, results);
+  validWordsImpl(word, filteredLexicon, parts, (validWord) => results.add(validWord));
   return Array.from(results).sort();
 }
+
 
 module.exports.validWords = validWords;
